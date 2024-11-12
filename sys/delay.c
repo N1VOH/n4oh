@@ -47,12 +47,14 @@ static void systick_tick(volatile uint32_t ticks)
 
 static void delay(volatile uint32_t ticks)
 {
-    uint32_t repeat = ticks / SysTick_LOAD_RELOAD_Msk;
-    uint32_t remain = ticks % SysTick_LOAD_RELOAD_Msk;
-    
+	uint32_t repeat, remain;
+	
     if (ticks <= SysTick_LOAD_RELOAD_Msk) {
         systick_tick(ticks);
     } else {
+		repeat = ticks / SysTick_LOAD_RELOAD_Msk;
+		remain = ticks % SysTick_LOAD_RELOAD_Msk;
+		
         while (repeat) {
             systick_tick(SysTick_LOAD_RELOAD_Msk);
             repeat--;
