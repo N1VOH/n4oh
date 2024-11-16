@@ -1,5 +1,7 @@
 /**
- * @brief bit[23:0] 0xFFFFFF = 16,777,215‬
+ * @brief 系统滴答定时器寄存器说明
+ *
+ * 总位数 24位 最大值为 16777215=0xFFFFFF
  *
  * SysTick->CTRL 
  * bit[16]R COUNTFLAG 如果在上次读取本寄存器后，SysTick 已经计到
