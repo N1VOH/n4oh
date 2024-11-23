@@ -14,12 +14,77 @@ extern "C" {
 #endif
 
 #ifndef MAX
+/**
+ * @brief Obtain the maximum of two values.
+ *
+ * @note Arguments are evaluated twice. Use Z_MAX for a GCC-only, single
+ * evaluation version
+ *
+ * @param a First value.
+ * @param b Second value.
+ *
+ * @returns Maximum value of @p a and @p b.
+ */
 #define MAX(a, b) (((a) > (b)) ? (a) : (b))
 #endif
 
 #ifndef MIN
+/**
+ * @brief Obtain the minimum of two values.
+ *
+ * @note Arguments are evaluated twice. Use Z_MIN for a GCC-only, single
+ * evaluation version
+ *
+ * @param a First value.
+ * @param b Second value.
+ *
+ * @returns Minimum value of @p a and @p b.
+ */
 #define MIN(a, b) (((a) < (b)) ? (a) : (b))
 #endif
+
+/**
+ * @brief Value of @p x rounded up to the next multiple of @p align.
+ */
+#define ROUND_UP(x, align)                                   \
+	((((unsigned long)(x) + ((unsigned long)(align) - 1)) / \
+	  (unsigned long)(align)) * (unsigned long)(align))
+
+/**
+ * @brief Value of @p x rounded down to the previous multiple of @p align.
+ */
+#define ROUND_DOWN(x, align)                                 \
+	(((unsigned long)(x) / (unsigned long)(align)) * (unsigned long)(align))
+
+/**
+ * @brief Checks if a value is within range.
+ *
+ * @note @p val is evaluated twice.
+ *
+ * @param val Value to be checked.
+ * @param min Lower bound (inclusive).
+ * @param max Upper bound (inclusive).
+ *
+ * @retval true If value is within range
+ * @retval false If the value is not within range
+ */
+#define IN_RANGE(val, min, max) ((min) <= (val) && (val) <= (max))
+
+/**
+ * @brief Divide and round up.
+ *
+ * Example:
+ * @code{.c}
+ * DIV_ROUND_UP(1, 2); // 1
+ * DIV_ROUND_UP(3, 2); // 2
+ * @endcode
+ *
+ * @param n Numerator.
+ * @param d Denominator.
+ *
+ * @return The result of @p n / @p d, rounded up.
+ */
+#define DIV_ROUND_UP(n, d) (((n) + (d) - 1) / (d))
 
 /** @brief 0 if @p cond is true-ish; causes a compile error otherwise. */
 #define ZERO_OR_COMPILE_ERROR(cond) ((int) sizeof(char[1 - 2 * !(cond)]) - 1)
@@ -58,19 +123,6 @@ extern "C" {
 #endif /* __cplusplus */
 
 /**
- * @brief Value of @p x rounded up to the next multiple of @p align.
- */
-#define ROUND_UP(x, align)                                   \
-	((((unsigned long)(x) + ((unsigned long)(align) - 1)) / \
-	  (unsigned long)(align)) * (unsigned long)(align))
-
-/**
- * @brief Value of @p x rounded down to the previous multiple of @p align.
- */
-#define ROUND_DOWN(x, align)                                 \
-	(((unsigned long)(x) / (unsigned long)(align)) * (unsigned long)(align))
-
-/**
  * @brief Get a pointer to a structure containing the element
  *
  * Example:
@@ -91,10 +143,11 @@ extern "C" {
  * @param member the name of the field within the struct @p ptr points to
  * @return a pointer to the structure that contains @p ptr
  */
-#define CONTAINER_OF(ptr, type, member) ({                  \
-    const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
-    (type *)( (char *)__mptr - offsetof(type,member) );     \
-})
+#define CONTAINER_OF(ptr, type, member)                         \
+    ({                                                          \
+        const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
+        (type *)( (char *)__mptr - offsetof(type, member) );    \
+    })
 
 #ifdef __cplusplus
 }
